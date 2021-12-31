@@ -1,0 +1,22 @@
+server:
+  shutdown: graceful
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak:
+            token-uri:
+  autoconfigure:
+    exclude:
+      org.springframework.boot.autoconfigure.security.reactive.ReactiveUserDetailsServiceAutoConfiguration
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info, health, configprops
