@@ -2,15 +2,22 @@ spring:
   cloud:
     gateway:
       default-filters:
-        - TokenRelay
+        - TokenRelay=
+        - StripPrefix=1
+        - RemoveRequestHeader=Cookie
       routes:
         - id: todo-service
-          uri: http://localhost:8100
+          uri: https://api.sampleapis.com
           predicates:
             - Path=/todo-service/**
-          filters:
-            - StripPrefix=1
-            - RemoveRequestHeader=Cookie
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      username: admin
+      password: password
+      database: api-gateway
+      authentication-database: admin
   security:
     oauth2:
       client:
