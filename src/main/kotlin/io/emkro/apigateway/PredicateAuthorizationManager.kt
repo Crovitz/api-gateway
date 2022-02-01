@@ -1,9 +1,8 @@
-package com.finecontract.apigateway.domain.application
+package io.emkro.apigateway
 
-import com.finecontract.apigateway.domain.Access
-import com.finecontract.apigateway.domain.Predicate.PERMISSION
-import com.finecontract.apigateway.domain.Predicate.REALM_ROLE
-import com.finecontract.apigateway.domain.Predicate.USER_PATH
+import io.emkro.apigateway.Predicate.PERMISSION
+import io.emkro.apigateway.Predicate.REALM_ROLE
+import io.emkro.apigateway.Predicate.USER_PATH
 import org.springframework.http.server.PathContainer
 import org.springframework.security.authorization.AuthorityAuthorizationDecision
 import org.springframework.security.authorization.AuthorizationDecision
@@ -31,12 +30,12 @@ class PredicateAuthorizationManager<T> internal constructor(
             .defaultIfEmpty(AuthorityAuthorizationDecision(false, this.authorities))
     }
 
-    companion object Policy {
-        fun authorize(access: Access): ReactiveAuthorizationManager<AuthorizationContext> {
-            return when (access.predicate) {
-                PERMISSION -> hasPermission(access.authority)
-                REALM_ROLE -> hasRealmRole(access.authority)
-                USER_PATH -> isUser(access.pathSegment)
+    companion object Access {
+        fun authorize(authorization: Authorization): ReactiveAuthorizationManager<AuthorizationContext> {
+            return when (authorization.predicate) {
+                PERMISSION -> hasPermission(authorization.authority)
+                REALM_ROLE -> hasRealmRole(authorization.authority)
+                USER_PATH -> isUser(authorization.pathSegment)
             }
         }
 

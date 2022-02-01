@@ -1,4 +1,4 @@
-package com.finecontract.apigateway.configuration
+package io.emkro.apigateway
 
 import org.springframework.context.annotation.Configuration
 import java.util.Locale

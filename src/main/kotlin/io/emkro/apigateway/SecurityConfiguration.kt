@@ -1,8 +1,5 @@
-package com.finecontract.apigateway.configuration
+package io.emkro.apigateway
 
-import com.finecontract.apigateway.domain.application.PermissionTicketConverter
-import com.finecontract.apigateway.domain.application.PredicateAuthorizationManager
-import com.finecontract.apigateway.infrastructure.AccessRepository
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -28,24 +25,23 @@ class SecurityConfiguration {
     fun springSecurityFilterChain(
         http: ServerHttpSecurity,
         permissionTicketConverter: PermissionTicketConverter,
-        accessRepository: AccessRepository,
+        authorizationRepository: AuthorizationRepository,
     ): SecurityWebFilterChain {
-        val accesses = accessRepository.findAll()
+        val authorizations = authorizationRepository.findAll()
         return http {
             authorizeExchange {
                 runBlocking {
                     launch {
-                        accesses.collect {
+                        authorizations.collect {
                             authorize(PathPatternParserServerWebExchangeMatcher(it.matcher, it.method), PredicateAuthorizationManager.authorize(it))
                         }
-                        authorize(anyExchange, permitAll)
+                        authorize(anyExchange, denyAll)
                     }
                 }
             }
             oauth2ResourceServer {
                 jwt { jwtAuthenticationConverter = extractGrantedAuthorities(permissionTicketConverter) }
             }
-            csrf { disable() }
         }
     }
 

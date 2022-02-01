@@ -1,21 +1,44 @@
 spring:
   cloud:
     gateway:
+      default-filters:
+        - TokenRelay=
+        - StripPrefix=1
+        - RemoveRequestHeader=Cookie
       routes:
-        - id: offer-service
-          uri: http://localhost:8100
+        - id: todo-service
+          uri: https://api.sampleapis.com
           predicates:
-            - Path=/offer-service/**
+            - Path=/todo-service/**
   data:
     mongodb:
       host: localhost
       port: 27017
       username: admin
       password: password
+      database: api-gateway
       authentication-database: admin
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak:
+            token-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/token
+            authorization-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/auth
+            userinfo-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/userinfo
+        registration:
+          main:
+            provider: keycloak
+            client-id: ${keycloak.client-id}
+            client-secret: ${keycloak.client-secret}
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/keycloak"
+      resourceserver:
+        jwt:
+          issuer-uri: ${keycloak.url}/auth/realms/${keycloak.realm}
 
 keycloak:
   url: http://localhost:9999
-  realm: finecontract
+  realm: todo
   client-id: main
   client-secret: dVfXJXyha4QShlemFlyORTm9cm0q8RMc

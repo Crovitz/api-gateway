@@ -1,4 +1,4 @@
-package com.finecontract.apigateway.domain.application
+package io.emkro.apigateway
 
 import org.springframework.core.convert.converter.Converter
 import org.springframework.security.core.GrantedAuthority

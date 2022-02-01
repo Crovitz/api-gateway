@@ -5,48 +5,15 @@ server:
 spring:
   application:
     name: api-gateway
-  cloud:
-    gateway:
-      default-filters:
-        - TokenRelay=
-        - StripPrefix=1
-        - RemoveRequestHeader=Cookie
-      routes:
-        - id: offer-service
-          uri: http://offer-service:8080
-          predicates:
-            - Path=/offer-service/**
-  data:
-    mongodb:
-      host: mongodb
-      port: 27017
-      database: api-gateway
   security:
     oauth2:
       client:
         provider:
           keycloak:
-            token-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/token
-            authorization-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/auth
-            userinfo-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/userinfo
-        registration:
-          main:
-            provider: keycloak
-            client-id: ${keycloak.client-id}
-            client-secret: ${keycloak.client-secret}
-            authorization-grant-type: authorization_code
-            redirect-uri: "{baseUrl}/login/oauth2/code/keycloak"
-      resourceserver:
-        jwt:
-          issuer-uri: ${keycloak.url}/auth/realms/${keycloak.realm}
-  jackson:
-    mapper:
-      accept-case-insensitive-enums: true
-keycloak:
-  url: http://keycloak:8080
-  realm: finecontract
-  client-id: main
-  client-secret:
+            token-uri:
+#  autoconfigure:
+#    exclude:
+#      org.springframework.boot.autoconfigure.security.reactive.ReactiveUserDetailsServiceAutoConfiguration
 
 management:
   endpoints:
