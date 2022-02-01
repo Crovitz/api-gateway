@@ -1,4 +1,4 @@
-package io.emkro.apigateway
+package com.finecontract.apigateway.domain
 
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
@@ -6,9 +6,9 @@ import org.springframework.data.annotation.TypeAlias
 import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.http.HttpMethod
 
-@Document("authorizations")
-@TypeAlias("Authorization")
-data class Authorization internal constructor(
+@Document("accesses")
+@TypeAlias("Access")
+data class Access internal constructor(
     @Id val id: ObjectId,
     val method: HttpMethod?,
     val matcher: String,
